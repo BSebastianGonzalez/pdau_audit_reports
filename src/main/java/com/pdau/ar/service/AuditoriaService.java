@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 
 @Service
@@ -30,13 +31,17 @@ public class AuditoriaService {
     }
 
     // 2. Totales por rango (start/end son Date o LocalDateTime según campo)
-    public TotalesDTO obtenerTotalesPorRango(Date startDateForDateFields, Date endDateForDateFields,
-                                             LocalDateTime startLdtForLocalDateTime, LocalDateTime endLdtForLocalDateTime) {
-        long r = respuestaRepo.countByFechaRespuestaBetween(startDateForDateFields, endDateForDateFields);
-        long a = archivamientoRepo.countByFechaArchivadoBetween(startLdtForLocalDateTime, endLdtForLocalDateTime);
-        long c = comentarioRepo.countByFechaCreacionBetween(startLdtForLocalDateTime, endLdtForLocalDateTime);
-        long ap = apelacionRepo.countByFechaApelacionBetween(startDateForDateFields, endDateForDateFields);
-        long ra = respuestaApelacionRepo.countByFechaRespuestaBetween(startDateForDateFields, endDateForDateFields);
+    public TotalesDTO obtenerTotalesPorRango(Date startDate, Date endDate) {
+        LocalDateTime startLdt = toLocal(startDate);
+        LocalDateTime endLdt = toLocal(endDate);
+
+        long r = respuestaRepo.countByFechaRespuestaBetween(startDate, endDate);
+        long ap = apelacionRepo.countByFechaApelacionBetween(startDate, endDate);
+        long ra = respuestaApelacionRepo.countByFechaRespuestaBetween(startDate, endDate);
+
+        long a = archivamientoRepo.countByFechaArchivadoBetween(startLdt, endLdt);
+        long c = comentarioRepo.countByFechaCreacionBetween(startLdt, endLdt);
+
         return new TotalesDTO(r, a, c, ap, ra);
     }
 
@@ -50,24 +55,22 @@ public class AuditoriaService {
     }
 
     // 4. Totales por admin y rango
-    public AdminTotalesDTO obtenerTotalesPorAdminYRango(Long adminId,
-                                                        Date startDateForDateFields, Date endDateForDateFields,
-                                                        LocalDateTime startLdtForLocalDateTime, LocalDateTime endLdtForLocalDateTime) {
-        long r = respuestaRepo.countByAdminIdAndFechaRespuestaBetween(adminId, startDateForDateFields, endDateForDateFields);
-        long a = archivamientoRepo.countByAdminIdAndFechaArchivadoBetween(adminId, startLdtForLocalDateTime, endLdtForLocalDateTime);
-        long c = comentarioRepo.countByAdminIdAndFechaCreacionBetween(adminId, startLdtForLocalDateTime, endLdtForLocalDateTime);
-        long ra = respuestaApelacionRepo.countByAdminIdAndFechaRespuestaBetween(adminId, startDateForDateFields, endDateForDateFields);
+    public AdminTotalesDTO obtenerTotalesPorAdminYRango(Long adminId, Date startDate, Date endDate) {
+        LocalDateTime startLdt = toLocal(startDate);
+        LocalDateTime endLdt = toLocal(endDate);
+
+        long r = respuestaRepo.countByAdminIdAndFechaRespuestaBetween(adminId, startDate, endDate);
+        long ra = respuestaApelacionRepo.countByAdminIdAndFechaRespuestaBetween(adminId, startDate, endDate);
+
+        long a = archivamientoRepo.countByAdminIdAndFechaArchivadoBetween(adminId, startLdt, endLdt);
+        long c = comentarioRepo.countByAdminIdAndFechaCreacionBetween(adminId, startLdt, endLdt);
+
         return new AdminTotalesDTO(r, a, c, ra);
     }
 
-    public static Date parseIsoToDate(String iso) {
-        if (iso == null) return null;
-        Instant instant = Instant.parse(iso);
-        return Date.from(instant);
-    }
-
-    public static LocalDateTime parseIsoToLocalDateTime(String iso) {
-        if (iso == null) return null;
-        return LocalDateTime.parse(iso);
+    private LocalDateTime toLocal(Date d) {
+        return d.toInstant()
+                .atZone(ZoneId.systemDefault())
+                .toLocalDateTime();
     }
 }

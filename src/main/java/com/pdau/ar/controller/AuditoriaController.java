@@ -13,7 +13,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.time.Instant;
 import java.time.LocalDateTime;
+import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
 
@@ -39,19 +41,14 @@ public class AuditoriaController {
     // Para LocalDateTime campos (sin offset) se espera formato 2025-12-01T00:00:00
     @GetMapping("/totales/rango")
     public ResponseEntity<TotalesDTO> getTotalesPorRango(
-            @RequestParam("start") String start,
-            @RequestParam("end") String end) {
+            @RequestParam String start,
+            @RequestParam String end) {
 
-        // Para campos java.util.Date
-        Date startDateForDateFields = AuditoriaService.parseIsoToDate(start);
-        Date endDateForDateFields = AuditoriaService.parseIsoToDate(end);
+        // Un solo parse para ambos tipos
+        Date startDate = parse(start);
+        Date endDate = parse(end);
 
-        // Para campos LocalDateTime
-        LocalDateTime startLdt = AuditoriaService.parseIsoToLocalDateTime(start);
-        LocalDateTime endLdt = AuditoriaService.parseIsoToLocalDateTime(end);
-
-        TotalesDTO dto = service.obtenerTotalesPorRango(startDateForDateFields, endDateForDateFields, startLdt, endLdt);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(service.obtenerTotalesPorRango(startDate, endDate));
     }
 
     // 3. Totales por admin (excluye apelaciones)
@@ -64,16 +61,13 @@ public class AuditoriaController {
     @GetMapping("/admin/{adminId}/totales/rango")
     public ResponseEntity<AdminTotalesDTO> getTotalesPorAdminYRango(
             @PathVariable Long adminId,
-            @RequestParam("start") String start,
-            @RequestParam("end") String end) {
+            @RequestParam String start,
+            @RequestParam String end) {
 
-        Date startDateForDateFields = AuditoriaService.parseIsoToDate(start);
-        Date endDateForDateFields = AuditoriaService.parseIsoToDate(end);
-        LocalDateTime startLdt = AuditoriaService.parseIsoToLocalDateTime(start);
-        LocalDateTime endLdt = AuditoriaService.parseIsoToLocalDateTime(end);
+        Date startDate = parse(start);
+        Date endDate = parse(end);
 
-        AdminTotalesDTO dto = service.obtenerTotalesPorAdminYRango(adminId, startDateForDateFields, endDateForDateFields, startLdt, endLdt);
-        return ResponseEntity.ok(dto);
+        return ResponseEntity.ok(service.obtenerTotalesPorAdminYRango(adminId, startDate, endDate));
     }
 
     // 5. Endpoints para retornar acciones (no contar) por admin.
@@ -109,5 +103,11 @@ public class AuditoriaController {
     @GetMapping("/apelaciones")
     public ResponseEntity<List<AuditoriaApelacion>> getApelaciones() {
         return ResponseEntity.ok(apelacionRepo.findAll());
+    }
+
+    private Date parse(String iso) {
+        if (iso.contains("Z") || iso.contains("+"))
+            return Date.from(Instant.parse(iso)); // ISO con zona
+        return Date.from(LocalDateTime.parse(iso).atZone(ZoneId.systemDefault()).toInstant()); // sin zona
     }
 }
