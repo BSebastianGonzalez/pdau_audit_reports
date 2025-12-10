@@ -7,6 +7,9 @@ import java.util.Date;
 import java.util.List;
 
 public interface AuditoriaRespuestaApelacionRepository extends JpaRepository<AuditoriaRespuestaApelacion, Long> {
-    List<AuditoriaRespuestaApelacion> findByFechaRespuestaBetween(Date inicio, Date fin);
+    long count();
+    long countByFechaRespuestaBetween(Date start, Date end);
+    long countByAdminId(Long adminId);
+    long countByAdminIdAndFechaRespuestaBetween(Long adminId, Date start, Date end);
     List<AuditoriaRespuestaApelacion> findByAdminId(Long adminId);
 }

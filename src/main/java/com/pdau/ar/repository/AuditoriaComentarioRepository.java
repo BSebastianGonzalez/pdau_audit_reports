@@ -7,6 +7,9 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public interface AuditoriaComentarioRepository extends JpaRepository<AuditoriaComentario, Long> {
-    List<AuditoriaComentario> findByFechaCreacionBetween(LocalDateTime inicio, LocalDateTime fin);
+    long count();
+    long countByFechaCreacionBetween(LocalDateTime start, LocalDateTime end);
+    long countByAdminId(Long adminId);
+    long countByAdminIdAndFechaCreacionBetween(Long adminId, LocalDateTime start, LocalDateTime end);
     List<AuditoriaComentario> findByAdminId(Long adminId);
 }
