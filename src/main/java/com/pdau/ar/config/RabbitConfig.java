@@ -25,6 +25,13 @@ public class RabbitConfig {
     public static final String RESPUESTA_APELACION_ROUTING_KEY = "auditoria.respuesta_apelacion.creada";
     public static final String RESPUESTA_APELACION_QUEUE = "auditoria.respuesta_apelacion.queue";
 
+    public static final String COMENTARIO_EXCHANGE = "auditoria.comentario.exchange";
+    public static final String COMENTARIO_ROUTING_KEY = "auditoria.comentario.creado";
+    public static final String COMENTARIO_QUEUE = "auditoria.comentario.queue";
+
+    public static final String ARCHIVAMIENTO_EXCHANGE = "auditoria.archivamiento.exchange";
+    public static final String ARCHIVAMIENTO_ROUTING_KEY = "auditoria.archivamiento.creado";
+    public static final String ARCHIVAMIENTO_QUEUE = "auditoria.archivamiento.queue";
 
     @Bean
     public Jackson2JsonMessageConverter jackson2JsonMessageConverter() {
@@ -80,6 +87,40 @@ public class RabbitConfig {
         return BindingBuilder.bind(respuestaApelacionQueue())
                 .to(respuestaApelacionExchange())
                 .with(RESPUESTA_APELACION_ROUTING_KEY);
+    }
+
+    @Bean
+    public Queue comentarioQueue() {
+        return new Queue(COMENTARIO_QUEUE, true);
+    }
+
+    @Bean
+    public Queue archivamientoQueue() {
+        return new Queue(ARCHIVAMIENTO_QUEUE, true);
+    }
+
+    @Bean
+    public TopicExchange comentarioExchange() {
+        return new TopicExchange(COMENTARIO_EXCHANGE);
+    }
+
+    @Bean
+    public TopicExchange archivamientoExchange() {
+        return new TopicExchange(ARCHIVAMIENTO_EXCHANGE);
+    }
+
+    @Bean
+    public Binding comentarioBinding() {
+        return BindingBuilder.bind(comentarioQueue())
+                .to(comentarioExchange())
+                .with(COMENTARIO_ROUTING_KEY);
+    }
+
+    @Bean
+    public Binding archivamientoBinding() {
+        return BindingBuilder.bind(archivamientoQueue())
+                .to(archivamientoExchange())
+                .with(ARCHIVAMIENTO_ROUTING_KEY);
     }
 }
 
