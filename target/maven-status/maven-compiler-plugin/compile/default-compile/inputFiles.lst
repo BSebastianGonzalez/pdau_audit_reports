@@ -1,5 +1,8 @@
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\AuditReportApplication.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\config\RabbitConfig.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\controller\AuditoriaController.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\dto\AdminTotalesDTO.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\dto\TotalesDTO.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\event\ApelacionAuditEvent.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\event\ArchivamientoAuditEvent.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\event\ComentarioAuditEvent.java
@@ -19,3 +22,4 @@ C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservi
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\repository\AuditoriaComentarioRepository.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\repository\AuditoriaRespuestaApelacionRepository.java
 C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\repository\AuditoriaRespuestaRepository.java
+C:\Users\SEBASTIAN\OneDrive\Escritorio\Universidad\8. Octavo semestre\MIcroservicios\Proyecto\ar\src\main\java\com\pdau\ar\service\AuditoriaService.java
